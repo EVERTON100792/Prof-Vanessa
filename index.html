@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Loja Educacional de PDFs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <h1>Materiais Educativos</h1>
+      <nav>
+        <a href="#">Início</a>
+        <a href="#sobre">Sobre mim</a>
+      </nav>
+      <input type="text" id="search" placeholder="Buscar materiais..." />
+    </div>
+  </header>
+
+  <main id="produtos" class="container">
+    <div class="produto" data-nome="Atividades de Alfabetização">
+      <img src="pdf1.jpg" alt="Atividades de Alfabetização" />
+      <h2>Atividades de Alfabetização</h2>
+      <p>Exercícios para auxiliar no processo de leitura e escrita.</p>
+      <strong>R$ 12,00</strong>
+      <button class="comprar-btn">Comprar Agora</button>
+      <div class="avaliacao">⭐⭐⭐⭐☆</div>
+      <div class="comentarios">
+        <h3>Comentários</h3>
+        <ul class="lista-comentarios"></ul>
+        <input type="text" placeholder="Deixe seu comentário..." class="campo-comentario" />
+        <button class="btn-comentar">Comentar</button>
+      </div>
+    </div>
+
+    <div class="produto" data-nome="Matemática para o 3º ano">
+      <img src="pdf2.jpg" alt="Matemática para o 3º ano" />
+      <h2>Matemática para o 3º ano</h2>
+      <p>Material completo com atividades e desafios.</p>
+      <strong>R$ 18,00</strong>
+      <button class="comprar-btn">Comprar Agora</button>
+      <div class="avaliacao">⭐⭐⭐⭐⭐</div>
+      <div class="comentarios">
+        <h3>Comentários</h3>
+        <ul class="lista-comentarios"></ul>
+        <input type="text" placeholder="Deixe seu comentário..." class="campo-comentario" />
+        <button class="btn-comentar">Comentar</button>
+      </div>
+    </div>
+  </main>
+
+  <section id="sobre" class="container">
+    <h2>Sobre mim</h2>
+    <p>Sou professora e crio materiais educativos de qualidade para ajudar outros educadores e alunos. Cada PDF é feito com carinho e experiência de sala de aula.</p>
+  </section>
+
+  <footer>
+    <div class="container">
+      <p>Siga-me:</p>
+      <div class="social-icons">
+        <a href="#"><img src="icon-instagram.svg" alt="Instagram" /></a>
+        <a href="#"><img src="icon-whatsapp.svg" alt="WhatsApp" /></a>
+        <a href="#"><img src="icon-email.svg" alt="Email" /></a>
+      </div>
+      <p>&copy; 2025 - Materiais Educativos por Professora</p>
+    </div>
+  </footer>
+
+  <!-- Modal do formulário -->
+  <div id="formulario-modal">
+    <form id="form-compra">
+      <button type="button" class="fechar-btn" title="Fechar formulário">&times;</button>
+      <h2>Finalize sua compra</h2>
+      <p id="produto-nome">Produto: </p>
+      <img id="imagem-produto" src="" alt="Produto" />
+      <label for="nome">Seu nome:</label>
+      <input type="text" name="nome" id="nome" required placeholder="Digite seu nome" />
+      <label for="email">Seu email:</label>
+      <input type="email" name="email" id="email" required placeholder="Digite seu email" />
+      <label for="comprovante">Envie o comprovante (imagem):</label>
+      <input type="file" name="comprovante" id="comprovante" accept="image/*" required />
+      <button type="submit">Enviar comprovante</button>
+    </form>
+  </div>
+
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
