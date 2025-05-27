@@ -130,20 +130,3 @@ function atualizarCarrinho() {
   contadorCarrinho.textContent = carrinho.length;
 }
 
-// Pesquisa de produtos
-const campoBusca = document.getElementById("search");
-
-campoBusca.addEventListener("input", () => {
-  const termo = campoBusca.value.toLowerCase();
-
-  produtos.forEach(produto => {
-    const nome = produto.dataset.nome.toLowerCase();
-    const titulo = produto.querySelector("h2").textContent.toLowerCase();
-
-    if (nome.includes(termo) || titulo.includes(termo)) {
-      produto.style.display = "block";
-    } else {
-      produto.style.display = "none";
-    }
-  });
-});
