@@ -1,186 +1,149 @@
-// Inicializa EmailJS (substitua com seu user ID)
-emailjs.init('SEU_USER_ID_EMAILJS');
+// Inicialização do EmailJS (substitua com sua chave pública)
+emailjs.init("SEU_USER_ID_DO_EMAILJS");
 
-document.addEventListener('DOMContentLoaded', () => {
-  const comprarBtns = document.querySelectorAll('.comprar-btn');
-  const modal = document.getElementById('formulario-modal');
-  const fecharBtn = modal.querySelector('.fechar-btn');
-  const form = document.getElementById('form-compra');
-  const produtoNomeElem = document.getElementById('produto-nome');
-  const imagemProdutoElem = document.getElementById('imagem-produto');
-  const searchInput = document.getElementById('search');
-  const produtos = document.querySelectorAll('.produto');
+const carrinho = [];
+const listaCarrinho = document.getElementById("lista-carrinho");
+const contadorCarrinho = document.getElementById("contador-carrinho");
+const carrinhoDetalhes = document.getElementById("carrinho-detalhes");
+const abrirCarrinho = document.getElementById("abrir-carrinho");
+const finalizarCompra = document.getElementById("finalizar-compra");
+const formularioModal = document.getElementById("formulario-modal");
+const formCompra = document.getElementById("form-compra");
+const produtoNome = document.getElementById("produto-nome");
+const imagemProduto = document.getElementById("imagem-produto");
 
-  let produtoSelecionado = null; // Remanejei para manter, mas não usaremos no clique "Comprar"
+const produtos = document.querySelectorAll(".produto");
 
-  // Removi o código que abria o modal no clique comprar
-  // Apenas adiciona produto ao carrinho abaixo
+produtos.forEach((produto) => {
+  const nome = produto.dataset.nome;
+  const preco = parseFloat(produto.querySelector("strong").textContent.replace("R$ ", "").replace(",", "."));
+  const imagem = produto.querySelector("img").src;
 
-  // Array que guarda os produtos no carrinho
-  const carrinho = [];
-  const contadorCarrinho = document.getElementById('contador-carrinho');
-  const listaCarrinho = document.getElementById('lista-carrinho');
-  const carrinhoDetalhes = document.getElementById('carrinho-detalhes');
-  const abrirCarrinho = document.getElementById('abrir-carrinho');
-  const finalizarBtn = document.getElementById('finalizar-compra');
-
-  // Ao clicar no botão comprar, adiciona ao carrinho
-  comprarBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const produto = btn.closest('.produto');
-      const nome = produto.querySelector('h2').innerText;
-      const preco = produto.querySelector('strong').innerText;
-
-      carrinho.push({ nome, preco });
-      atualizarCarrinho();
-    });
-  });
-
-  // Função para atualizar o carrinho na interface
-  function atualizarCarrinho() {
-    contadorCarrinho.innerText = carrinho.length;
-    listaCarrinho.innerHTML = '';
-    carrinho.forEach(item => {
-      const li = document.createElement('li');
-      li.textContent = `${item.nome} - ${item.preco}`;
-      listaCarrinho.appendChild(li);
-    });
-  }
-
-  // Abrir/fechar detalhes do carrinho
-  abrirCarrinho.addEventListener('click', () => {
-    carrinhoDetalhes.classList.toggle('escondido');
-  });
-
-  // Quando clicar em finalizar, abrir o modal do formulário
-  finalizarBtn.addEventListener('click', () => {
-    if (carrinho.length === 0) {
-      alert("Seu carrinho está vazio!");
-      return;
-    }
-
-    // Ajusta título e esconde imagem (compra múltipla)
-    produtoNomeElem.textContent = 'Compra de materiais pedagógicos';
-    imagemProdutoElem.style.display = 'none';
-
-    modal.classList.add('active');
-  });
-
-  // Fechar modal
-  fecharBtn.addEventListener('click', () => {
-    form.reset();
-    modal.classList.remove('active');
-    imagemProdutoElem.style.display = ''; // Voltar a mostrar a imagem quando fechar
-  });
-
-  // Envio do formulário com EmailJS
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-
-    if (!form.nome.value.trim() || !form.email.value.trim() || !form.comprovante.files.length) {
-      alert('Por favor, preencha todos os campos e envie o comprovante.');
-      return;
-    }
-
-    const file = form.comprovante.files[0];
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = reader.result.split(',')[1];
-
-      // Você pode juntar todos os nomes do carrinho para enviar
-      const nomesProdutos = carrinho.map(item => item.nome).join(', ');
-
-      const templateParams = {
-        nome: form.nome.value,
-        email: form.email.value,
-        produto: nomesProdutos,
-        comprovante: base64,
-        nome_arquivo: file.name
-      };
-
-      emailjs.send('SEU_SERVICE_ID', 'SEU_TEMPLATE_ID', templateParams)
-        .then(() => {
-          alert('Comprovante enviado com sucesso! Aguarde a liberação do download.');
-          form.reset();
-          modal.classList.remove('active');
-          imagemProdutoElem.style.display = '';
-
-          // Limpa o carrinho após finalizar compra
-          carrinho.length = 0;
-          atualizarCarrinho();
-          carrinhoDetalhes.classList.add('escondido');
-        }, (error) => {
-          alert('Erro ao enviar o comprovante. Tente novamente.');
-          console.error(error);
-        });
-    };
-
-    reader.readAsDataURL(file);
-  });
-
-  // Busca simples dos produtos
-  searchInput.addEventListener('input', () => {
-    const termo = searchInput.value.toLowerCase();
-    produtos.forEach(prod => {
-      const nome = prod.getAttribute('data-nome').toLowerCase();
-      prod.style.display = nome.includes(termo) ? '' : 'none';
-    });
-  });
-
-  // Comentários locais na tela
-  document.querySelectorAll('.btn-comentar').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.closest('.comentarios');
-      const input = container.querySelector('.campo-comentario');
-      const lista = container.querySelector('.lista-comentarios');
-      const texto = input.value.trim();
-      if (texto) {
-        const li = document.createElement('li');
-        li.textContent = texto;
-        lista.appendChild(li);
-        input.value = '';
-      }
-    });
+  produto.querySelector(".comprar-btn").addEventListener("click", () => {
+    carrinho.push({ nome, preco, imagem });
+    atualizarCarrinho();
   });
 });
-document.querySelectorAll('.avaliacao').forEach(avaliacao => {
-  const estrelas = avaliacao.querySelectorAll('.estrela');
 
-  function atualizarVisual(valor) {
-    estrelas.forEach((estrela, index) => {
-      if (index < valor) {
-        estrela.classList.add('filled');
-      } else {
-        estrela.classList.remove('filled');
-      }
-    });
+function atualizarCarrinho() {
+  listaCarrinho.innerHTML = "";
+  let total = 0;
+
+  carrinho.forEach((item, index) => {
+    const li = document.createElement("li");
+    li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2).replace(".", ",")}`;
+    listaCarrinho.appendChild(li);
+    total += item.preco;
+  });
+
+  const totalLi = document.createElement("li");
+  totalLi.innerHTML = `<strong>Total: R$ ${total.toFixed(2).replace(".", ",")}</strong><br/><img src="qrcode-pix.png" alt="QR Code Pix" style="margin-top:10px;width:150px;"> <p style="font-size:14px;">Escaneie o QR Code para pagar via Pix.</p>`;
+  listaCarrinho.appendChild(totalLi);
+
+  contadorCarrinho.textContent = carrinho.length;
+}
+
+abrirCarrinho.addEventListener("click", () => {
+  carrinhoDetalhes.classList.toggle("escondido");
+});
+
+finalizarCompra.addEventListener("click", () => {
+  if (carrinho.length === 0) {
+    alert("Seu carrinho está vazio.");
+    return;
   }
 
-  // Recupera avaliação salva no localStorage, se existir
-  const nomeProduto = avaliacao.closest('.produto').dataset.nome;
-  const avaliacaoSalva = localStorage.getItem('avaliacao_' + nomeProduto);
-  const valorInicial = avaliacaoSalva ? parseInt(avaliacaoSalva) : 0;
-  avaliacao.setAttribute('data-valor', valorInicial);
-  atualizarVisual(valorInicial);
+  // Mostra o formulário com o primeiro produto (ou adapte para todos)
+  const produto = carrinho[0];
+  produtoNome.textContent = `Produto: ${produto.nome}`;
+  imagemProduto.src = produto.imagem;
+  formularioModal.style.display = "block";
+});
 
-  estrelas.forEach(estrela => {
-    estrela.addEventListener('click', () => {
-      const valor = parseInt(estrela.getAttribute('data-estrela'));
-      avaliacao.setAttribute('data-valor', valor);
-      atualizarVisual(valor);
+// Fechar formulário
+document.querySelector(".fechar-btn").addEventListener("click", () => {
+  formularioModal.style.display = "none";
+});
 
-      // Salva no localStorage para persistência
-      localStorage.setItem('avaliacao_' + nomeProduto, valor);
+// Envio do formulário
+formCompra.addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const formData = new FormData(formCompra);
+  const nome = formData.get("nome");
+  const email = formData.get("email");
+  const comprovante = formData.get("comprovante");
+
+  if (!comprovante) {
+    alert("Por favor, envie o comprovante.");
+    return;
+  }
+
+  emailjs.sendForm("SEU_SERVICE_ID", "SEU_TEMPLATE_ID", this).then(
+    function () {
+      alert("Compra finalizada com sucesso! Você receberá os materiais em breve.");
+      formularioModal.style.display = "none";
+      formCompra.reset();
+      carrinho.length = 0;
+      atualizarCarrinho();
+    },
+    function (error) {
+      alert("Erro ao enviar. Tente novamente.");
+      console.error("Erro:", error);
+    }
+  );
+});
+function atualizarCarrinho() {
+  listaCarrinho.innerHTML = "";
+  let total = 0;
+
+  carrinho.forEach((item, index) => {
+    const li = document.createElement("li");
+
+    // Texto do item
+    li.textContent = `${item.nome} - R$ ${item.preco.toFixed(2).replace(".", ",")}`;
+
+    // Botão remover
+    const btnRemover = document.createElement("button");
+    btnRemover.textContent = "Remover";
+    btnRemover.style.marginLeft = "10px";
+    btnRemover.style.cursor = "pointer";
+    btnRemover.addEventListener("click", () => {
+      carrinho.splice(index, 1);
+      atualizarCarrinho();
     });
 
-    estrela.addEventListener('mouseover', () => {
-      const hoverValor = parseInt(estrela.getAttribute('data-estrela'));
-      atualizarVisual(hoverValor);
-    });
+    li.appendChild(btnRemover);
+    listaCarrinho.appendChild(li);
 
-    estrela.addEventListener('mouseout', () => {
-      const valorAtual = parseInt(avaliacao.getAttribute('data-valor'));
-      atualizarVisual(valorAtual);
-    });
+    total += item.preco;
+  });
+
+  if (carrinho.length > 0) {
+    const totalLi = document.createElement("li");
+    totalLi.innerHTML = `<strong>Total: R$ ${total.toFixed(2).replace(".", ",")}</strong><br/>
+      <img src="qrcode-pix.png" alt="QR Code Pix" style="margin-top:10px;width:150px;"> 
+      <p style="font-size:14px;">Escaneie o QR Code para pagar via Pix.</p>`;
+    listaCarrinho.appendChild(totalLi);
+  }
+
+  contadorCarrinho.textContent = carrinho.length;
+}
+
+// Pesquisa de produtos
+const campoBusca = document.getElementById("search");
+
+campoBusca.addEventListener("input", () => {
+  const termo = campoBusca.value.toLowerCase();
+
+  produtos.forEach(produto => {
+    const nome = produto.dataset.nome.toLowerCase();
+    const titulo = produto.querySelector("h2").textContent.toLowerCase();
+
+    if (nome.includes(termo) || titulo.includes(termo)) {
+      produto.style.display = "block";
+    } else {
+      produto.style.display = "none";
+    }
   });
 });

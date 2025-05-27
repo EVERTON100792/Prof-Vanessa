@@ -398,3 +398,61 @@ header nav a:hover {
 .avaliacao .estrela.filled {
   color: #ffb400; /* amarelo escuro para estrelas selecionadas */
 }
+
+html, body {
+  height: 100%;
+}
+
+#formulario-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  background: rgba(103, 157, 145, 0.85);
+  z-index: 9999;
+  padding: 0; /* retirar padding para não deslocar */
+  overflow: hidden; /* evita barras de rolagem */
+}
+
+#formulario-modal.active {
+  display: flex;
+}
+
+#form-compra {
+  background: white;
+  border-radius: 12px;
+  padding: 25px 30px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 6px 20px rgba(127, 188, 174, 0.3);
+  position: relative;
+  text-align: center;
+  /* opcional: para garantir alinhamento interno */
+  margin: 0 auto;
+}
+
+.remover-btn {
+  background: #e06666; /* vermelho suave */
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  border-radius: 30px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(224, 102, 102, 0.6);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  width: 100%;
+}
+
+.remover-btn:hover {
+  background: #c94c4c; /* vermelho mais forte */
+  box-shadow: 0 6px 16px rgba(201, 76, 76, 0.85);
+  transform: scale(1.05);
+}
+
+
+
