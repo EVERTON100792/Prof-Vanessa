@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Materiais - Blog da Prof. Vane</title>
+    <link rel="stylesheet" href="assets/css/style.css" />
+    <script>
+        function mostrarSecao(secao) {
+            document.getElementById('gratuitos').style.display = secao === 'gratuitos' ? 'block' : 'none';
+            document.getElementById('pagos').style.display = secao === 'pagos' ? 'block' : 'none';
+            document.getElementById('btnGratuitos').classList.toggle('ativo', secao === 'gratuitos');
+            document.getElementById('btnPagos').classList.toggle('ativo', secao === 'pagos');
+        }
+        function abrirFormulario(material) {
+            document.getElementById('materialSelecionado').value = material;
+            document.getElementById('formCompra').style.display = 'block';
+            window.scrollTo({top:document.body.scrollHeight, behavior:'smooth'});
+        }
+        function enviarFormulario(e) {
+            e.preventDefault();
+            const nome = document.getElementById('nomeComprador').value;
+            const email = document.getElementById('emailComprador').value;
+            const material = document.getElementById('materialSelecionado').value;
+            if(!nome || !email) {
+                alert('Por favor preencha nome e email.');
+                return;
+            }
+            const assunto = encodeURIComponent('Interesse em material pago: ' + material);
+            const corpo = encodeURIComponent(`Olá,\nTenho interesse no material: ${material}\nNome: ${nome}\nEmail: ${email}`);
+            window.location.href = `mailto:luismouraevertonn@gmail.com?subject=${assunto}&body=${corpo}`;
+        }
+    </script>
+</head>
+<body onload="mostrarSecao('gratuitos')">
+    <header>
+        <h1>Materiais</h1>
+        <nav>
+            <a href="index.html">Início</a>
+            <a href="sobre.html">Sobre</a>
+            <a href="materiais.html">Materiais</a>
+            <a href="contato.html">Contato</a>
+        </nav>
+    </header>
+    <main>
+        <div class="abas">
+            <div>
+            <button class="botao-tipo botao-gratis">Materiais Gratuitos</button>
+            <button class="botao-tipo botao-pago">Materiais Pagos</button>
+            </div>
+
+            <button id="btnPagos" onclick="mostrarSecao('pagos')">Pagos</button>
+        </div>
+        <section id="gratuitos" class="secaoMateriais">
+            <h2>Materiais Gratuitos</h2>
+            <div class="listaMateriais">
+                <div class="material">
+                    <h3>Atividade de Leitura</h3>
+                    <p>Material para praticar leitura e interpretação.</p>
+                    <a href="materiais/gratuitos/atividade_leitura.pdf" download>Baixar PDF</a>
+                </div>
+                <div class="material">
+                    <h3>Exercícios de Ciências</h3>
+                    <p>Exercícios para entender conceitos básicos.</p>
+                    <a href="materiais/gratuitos/exercicios_ciencias.pdf" download>Baixar PDF</a>
+                </div>
+            </div>
+        </section>
+        <section id="pagos" class="secaoMateriais" style="display:none;">
+            <h2>Materiais Pagos</h2>
+            <div class="listaMateriais">
+                <div class="material">
+                    <h3>Pacote Completo de Matemática</h3>
+                    <p>Atividades avançadas para alunos do 5º ano.</p>
+                    <button onclick="abrirFormulario('Pacote Completo de Matemática')">Quero Comprar</button>
+                </div>
+                <div class="material">
+                    <h3>Pacote de Redação Criativa</h3>
+                    <p>Atividades para estimular a escrita criativa.</p>
+                    <button onclick="abrirFormulario('Pacote de Redação Criativa')">Quero Comprar</button>
+                </div>
+            </div>
+            <form id="formCompra" style="display:none; margin-top:20px;" onsubmit="enviarFormulario(event)">
+                <h3>Enviar Interesse</h3>
+                <input type="hidden" id="materialSelecionado" name="material" />
+                <label for="nomeComprador">Nome:</label><br />
+                <input type="text" id="nomeComprador" name="nome" /><br />
+                <label for="emailComprador">Email:</label><br />
+                <input type="email" id="emailComprador" name="email" /><br /><br />
+                <button type="submit">Enviar Pedido</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>© 2025 Prof. Vane - Todos os direitos reservados</p>
+    </footer>
+</body>
+</html>
